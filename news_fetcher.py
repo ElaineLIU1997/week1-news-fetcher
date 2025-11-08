@@ -35,7 +35,7 @@ class NewsAPIFetcher:
         self.last_fetched_at = None  # Store the time of last fetch (optional)
     
     
-    def fetch_articles(self, query, num_articles=10):
+    def fetch_articles(self, query, num_articles=5):
         """
         Fetch articles about a specific topic.
         
@@ -59,41 +59,46 @@ class NewsAPIFetcher:
         - Response has JSON with structure: {"articles": [...]}
         - Handle errors with try/except
         """
-        
-        # TODO: Step 1 - Build parameters dictionary
-        params = {
-            # Fill this in!
-            # You need: apiKey, q, pageSize at minimum
-            "apiKey": self.api_key,
-            "q": query,
-            "pageSize": num_articles,
-            "sortBy": "publishedAt",
-            "language": "en",
-            "searchIn": "title,description",
-        }
-        
-        # Store the query for later use
-        self.last_query = query
-        
-        # TODO: Step 2 - Make the request
         try:
-            # Write your requests.get() call here
+            # Build parameters
+            params = {
+                "apiKey": self.api_key,
+                "q": query,
+                "pageSize": num_articles,
+            }
+            #print(f"DEBUG: Param = {params}")
+    
+            # Make API request
             response = requests.get(self.base_url, params=params)
-            if response.status_code == 200:
-                # Parse the JSON response
-                data = response.json()
-                # Response has JSON with structure: {"articles": [...]}
-                articles = data.get("articles", [])
-                self.articles = articles
-                return articles
-            else:
-                print(f"Error: {response.status_code} - {response.text}")
+            #print(f"DEBUG: Satus code = {response.status_code}")
+            #print(f"DEBUG: Response type = {type(response)}")
+
+            # Check status
+            if response.status_code != 200:
+                print(f"Error: API returned status {response.status_code}")
                 return []
+
+            # Parse JSON
+            data = response.json()
+            #print(f"DEBUG: Data keys = {data.keys()}")
             
+            # Extract articles (safely)
+            articles = data.get("articles", [])
+            #articles = data["articles"]
+            #print(f"DEBUG: Found {len(articles)} articles")
+
+            # Return results
+            return articles
+
+        except request.exceptions.ConnectionError:
+            print("Error: No internet connection!")
+            return []
+        
         except Exception as e:
-            # TODO: Handle errors (print error message, return empty list)
             print(f"Error: {e}")
             return []
+
+        pass
     
     
     def save_articles(self, articles, filename=None):
@@ -204,7 +209,7 @@ def main():
     fetcher = NewsAPIFetcher(api_key)
     
     # TODO: Fetch articles
-    articles = fetcher.fetch_articles(query, num_articles=10)
+    articles = fetcher.fetch_articles(query, num_articles=5)
     
     # TODO: Check if we got articles
     if articles:
