@@ -1,6 +1,6 @@
-# Week 1 News Fetcher
+# News Fetcher
 
-A Python script that fetches financial news articles from NewsAPI and saves them to JSON files.
+Professional CLI tool for fetching financial news from NewsAPI with filtering and validation.
 
 ## What It Does
 
@@ -11,12 +11,17 @@ This tool allows you to:
 
 ## Features
 
-- **API Integration**: Connects to NewsAPI to fetch real-time news
-- **Customizable Search**: Search for any topic (stocks, companies, finance keywords)
-- **Article Limit**: Specify how many articles to fetch (default: 10)
-- **JSON Export**: Saves articles with metadata (timestamp, query, article count)
-- **Formatted Output**: Displays article title, author, date, description, and URL
-- **Error Handling**: Graceful handling of API errors and network issues
+### Phase 1 (Basic Functionality)
+- ✅ **API Integration**: Connects to NewsAPI to fetch real-time news
+- ✅ **JSON Export**: Saves articles with metadata (timestamp, query, article count)
+- ✅ **Formatted Output**: Displays article title, author, date, description, and URL
+- ✅ **Error Handling**: Graceful handling of API errors and network issues
+
+### Phase 2 (Professional Features)
+- ✅ **Professional CLI**: argparse-based command-line arguments
+- ✅ **Date Filtering**: Fetch articles from last N days
+- ✅ **Data Validation**: Filters out incomplete/removed articles
+- ⏳ **Caching**: File-based cache (in progress)
 
 ## Requirements
 
@@ -35,19 +40,37 @@ pip3 install requests
 
 ## Usage
 
-Run the script:
+### Phase 2 (Current - Professional CLI)
+
 ```bash
-python3 news_fetcher.py
+# Basic usage (will prompt for API key)
+python3 news_fetcher.py --query Tesla
+
+# Specify number of articles
+python3 news_fetcher.py --query Bitcoin --count 10
+
+# Filter by date (last 7 days)
+python3 news_fetcher.py --query "stock market" --days 7
+
+# Provide API key via command line
+python3 news_fetcher.py --query Tesla --api-key YOUR_KEY
+
+# Combine multiple options
+python3 news_fetcher.py --query Bitcoin --count 10 --days 7
 ```
 
-You'll be prompted for:
-1. Your NewsAPI key
-2. Search topic (e.g., "Tesla", "Bitcoin", "banking")
+### Command-Line Arguments
 
-The script will:
-- Fetch the latest 10 articles
-- Display a formatted summary
-- Save results to a timestamped JSON file
+- `--query` (required): Search term (e.g., "Tesla", "Bitcoin")
+- `--count` (optional): Number of articles to fetch (default: 5)
+- `--days` (optional): Fetch articles from last N days
+- `--api-key` (optional): NewsAPI key (otherwise prompts)
+
+### Help
+
+```bash
+python3 news_fetcher.py --help
+```
 
 ### Example Output
 
@@ -172,3 +195,18 @@ Educational project for AI learning curriculum.
 
 - NewsAPI: https://newsapi.org/
 - Python Requests: https://requests.readthedocs.io/
+
+---
+
+## Built
+
+**Phase 1:** Nov 8, 2025 (Week 1, Day 3)
+- Approach: 70% manual typing
+- Status: ✅ Complete
+
+**Phase 2:** Nov 15, 2025 (Week 1, Day 3 continued)
+- Approach: 70% manual typing
+- Features: argparse CLI, date filtering, data validation
+- Status: ⏳ 75% complete (caching pending)
+
+**Purpose:** Learning API integration, CLI development, and professional Python patterns
